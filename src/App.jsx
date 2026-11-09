@@ -5,7 +5,7 @@ import viteLogo from './assets/vite.svg'
 import './App.css'
 
 function ExpenseItem(props) {
-  return <p>{props.title}: {props.amount}</p>
+  return <p>{props.title}: {props.amount} <button onClick={props.onEdit}>Edit</button><button onClick={props.onDelete}>Delete</button></p>
 }
 
 function App() {
@@ -13,6 +13,7 @@ function App() {
   const [expenses, setExpenses] = useState([]);
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
+  const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
     fetch('http://localhost:3000/expenses')
@@ -34,6 +35,34 @@ function handleAdd() {
 .catch((err) => alert('Failed: ' + err.message));
 }
 
+function handleDelete(id) {
+  fetch('http://localhost:3000/expenses/' + id, { method: 'DELETE'})
+  .then(() => setExpenses(expenses.filter((e) => e.id !== id)))
+  .catch((err) => alert('Failed' + err.message));
+}
+
+function handleEdit(expense) {
+  setEditingId(expense.id);
+  setTitle(expense.title);
+  setAmount(expense.amount);
+}
+
+function handleSave() {
+  fetch('http://localhost:3000/expenses/ ' + editingId, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title, amount: Number(amount)}),
+  })
+  .then((res) => res.json())
+  .then((updated) => {
+    setExpenses(expenses.map((e) => (e.id === editingId ? updated : e)));
+    setEditingId(null);
+    setTitle('');
+    setAmount('');
+  })
+  .catch((err) => alert('Failed: ' + err.message));
+}
+
   return (
     <>
       <section id="center">
@@ -46,9 +75,9 @@ function handleAdd() {
           <h1> My Expenses</h1>
           <input value={title} onChange={ (e) => setTitle(e.target.value)} placeholder='Title' />
           <input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder='Amount' />
-          <button onClick={handleAdd}>Add</button>
+          <button onClick={editingId === null ? handleAdd : handleSave}>{editingId === null ? 'Add' : 'Save'}</button>
          {expenses.map((e) => (
-          <ExpenseItem key={e.id} title={e.title} amount={e.amount} />
+          <ExpenseItem key={e.id} title={e.title} amount={e.amount} onDelete={() => handleDelete(e.id)} onEdit={() => handleEdit(e)} />
          ))}
           <p>
             Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
