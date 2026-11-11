@@ -1,16 +1,17 @@
-# React + Vite
+# Expense Tracker Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React front end for the Expense Tracker API. Add, edit and delete expenses from one page.
 
-Currently, two official plugins are available:
+## Tech
+- React with Vite
+- fetch for API calls
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Setup
+1. Start the API first (see the express-practice README), running on `http://localhost:3000`
+2. Run `npm install`
+3. Run `npm run dev`
+4. Open `http://localhost:5173`
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
+- List, add, edit and delete expenses
+- Server error messages shown on the page 
